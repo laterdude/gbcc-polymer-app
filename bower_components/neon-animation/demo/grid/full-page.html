@@ -1,0 +1,68 @@
+<link rel="import" href="../../neon-animatable-behavior.html">
+<link rel="import" href="../../neon-animation-runner-behavior.html">
+<link rel="import" href="animated-grid1.html">
+<link rel="import" href="fullsize-page-with-card.html">
+
+<dom-module id="full-page">
+
+  <style>
+    :host {
+      background: #4D4D4D;
+      visibility: hidden;
+      @apply(--layout-vertical);
+    }
+    
+    animated-grid1 {
+      height: 100%;
+      @apply(--layout-flex);
+    }
+  </style>
+
+  <template>
+
+    
+    <animated-grid1 on-tile-click="_onTileClick" id="grid"></animated-grid1>
+    
+    <fullsize-page-with-card id="fullsize-card" hero-id="hero" on-click="_onFullsizeClick">
+    </fullsize-page-with-card>
+
+  </template>
+
+</dom-module>
+
+
+<script>
+
+Polymer({
+
+  is: 'full-page',
+
+  behaviors: [
+    Polymer.NeonAnimatableBehavior,
+    Polymer.NeonAnimationRunnerBehavior
+  ],
+
+  properties: {
+
+    animationConfig: {
+      type: Object,
+      value: function() {
+        return {
+          'entry': [{
+            animatable: this.$.grid,
+            type: 'entry'
+          }]
+        };
+      }
+    }
+
+  },
+
+  show: function() {
+    this.style.visibility = 'visible';
+    this.playAnimation('entry');
+  }
+
+});
+
+</script>

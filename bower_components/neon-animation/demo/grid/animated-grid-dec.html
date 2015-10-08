@@ -1,0 +1,144 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-styles/paper-styles.html">
+<link rel="import" href="../../neon-shared-element-animatable-behavior.html">
+
+<dom-module id="animated-grid">
+
+  <link rel="import" type="css" href="../shared.css">
+
+  <style>
+
+    :host {
+      display: block;
+    }
+
+    :host::content div {
+      display: inline-block;
+      float: left;
+      color: white;
+      vertical-align: top;
+      width: calc(100% / 3);
+      height: calc(100% / 2);
+
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    :host::content div:hover {
+      @apply(--shadow-elevation-2dp);
+      position:relative;
+    }
+
+
+  </style>
+
+  <template>
+    <content id='content'></content>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'animated-grid',
+
+    behaviors: [
+      Polymer.NeonSharedElementAnimatableBehavior
+    ],
+
+    properties: {
+
+      animationConfig: {
+        type: Object,
+        value: function() {
+          return {
+            'entry': [{
+              name: 'cascaded-animation',
+              animation: 'transform-animation',
+              transformFrom: 'translateY(100%)',
+              transformTo: 'none',
+              timing: {
+                delay: 50
+              }
+            }]
+          }
+        }
+      }
+    },
+
+    attached: function() {
+      this.async(function() {
+        var nodeList = Polymer.dom(this.$.content).getDistributedNodes();
+        // I only want to animate divs
+        nodelist = nodeList.filter(function(node){
+          return (node.nodeName === "DIV");
+        });
+        this.animationConfig['entry'][0].nodes = nodeList;
+      });
+    },
+
+    _computeTileClass: function(color) {
+      return 'background-color: ' + color + '';
+    }
+
+  });
+
+</script>
+
+So i've been playing around with the neon element examples. Specifically the load example.
+
+I'm able to accomplish what I want but I feel there should be a more elegant way to do it. The way the example loads content is by creating an array inside of a config object and then uses a dom-repeat to stamp them out all from within animated-grid.html
+
+This seems to force very tight coupling between the animations and the content that is being animating. I don't want to encapsulate content in side of my grid I basically want to say Hey I want an animated grid here are the cells/content to be put inside of it and then having the animated grid take care of laying out and animating those children
+
+I set out to create an API that was more declarative like this.
+
+<animated-grid id="grid">
+  <div style="background-color: #9C27B0"> <span>1</span> </div>
+  <div style="background-color: #4CAF50"> <span>2</span> </div>
+  <div style="background-color: #2196F3"> <span>3</span> </div>
+  <div style="background-color: #673AB7"> <span>4</span> </div>
+  <div style="background-color: #FF9800"> <span>5</span> </div>
+  <div style="background-color: #049688"> <span>6</span> </div>
+</animated-grid>
+I figured I could change the css selectors from .tile to :host::content div.
+
+Then the template to
+
+  <template>
+    <content id='content'></content>
+  </template>
+I then took a stab at rewriting the attached method to get the children in the lightdom instead of queryselecting for .tile
+
+attached: function() {
+  this.async(function() {
+    var nodeList = Polymer.dom(this.$.content).getDistributedNodes();
+    // I only want to animate divs
+    nodelist = nodeList.filter(function(node){
+      return (node.nodeName === "DIV");
+    });
+    this.animationConfig['entry'][0].nodes = nodeList;
+  });
+},
+However, I keep getting a nasty error in my console.
+
+
+A good friend pointed out that while JavaScript is still insane, it's insane for different reasons than erroneously listed here. The error was that the variable being assigned into, nodelist, from the filter, did not have a capital "L", like the var nodeList does. In JS, this means nodelist is now in the global variable object,  global.nodelist, which is why nodeList seemingly wasn't filtered or assigned correctly into. So, another solution is to simply capitalize nodelist to nodeList in the filter return, and it should be fine.
+
+Everything you're doing is fine and good (the async in attached is the right way to setup your animationConfig), with the exception of one thing.
+
+The error you're getting is because you're attempting to animate text nodes with the cascade-animation you setup.
+
+You're attempting to animate text nodes because your variable nodeList contains all the original 13 light dom children, which includes the text nodes, instead of just divs.
+
+The reason your filtered array wasn't filtered, is because JavaScript is insane, and assigning into the array doesn't work as expected, like in every other language.
+
+A solution is to use a new variable for the filter results:
+
+var divNodes = nodeList.filter(function(node){
+  return (node.nodeName === 'DIV');
+});
+this.animationConfig.entry[0].nodes = divNodes;

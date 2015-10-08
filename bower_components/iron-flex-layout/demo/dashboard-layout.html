@@ -1,0 +1,94 @@
+<link rel="import" href="../iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../../../bower_components/neon-animation/animations/slide-left-animation.html">
+
+<dom-module id="dashboard-layout">
+
+  <style>
+
+    :host {
+      @apply(--layout-horizontal);
+      @apply(--paper-font-body2);
+    }
+
+   
+
+      
+
+    [content] {
+     
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap)
+      @apply(--layout-justified)
+      min-height: 100vh; 
+      /*min-height: 100%; try this later!!!*/
+      overflow: auto;
+    
+      background-image: linear-gradient(to top,  #3B4636 0%, #617159 100%);
+    }
+
+    [card] {
+      @apply(--layout-hoizontal);
+   
+      /*@apply(--shadow-elevation-4dp);*/
+
+      min-height: 33vh;
+      max-height: 33vh;
+      width: 33%;
+      min-width: 340px;
+      max-width: 25%;
+      margin: 2.5em 0em 0em 2.5em;
+      font-weight: bold;
+      padding: 20px;
+      background-image: radial-gradient(ellipse farthest-corner at center, #A17E36 0%, #80642D 100%);
+      /*background-color: var(--paper-grey-200);*/
+    }
+
+  </style>
+
+  <template>
+
+      <div content>
+        <paper-material elevation="3" card>Incident Information</paper-material>
+        <paper-material elevation="3" card>Predictive Services</paper-material>
+        <paper-material elevation="3" card>Logistics & Dispatch</paper-material>
+        <paper-material elevation="3" card>Administration</paper-material>
+        <paper-material elevation="3" card>Contact</paper-material>
+        <paper-material elevation="3" card>Other Applications</paper-material>
+        <!-- <paper-material elevation="3" card>Other Applications</paper-material> -->
+      </div>
+      <div content>
+
+      </div>
+    
+
+  </template>
+
+</dom-module>
+<script>
+
+  Polymer({
+    is: 'dashboard-layout',
+
+    behaviors: [Polymer.NeonAnimatableBehavior],
+
+    properties: {
+      animationConfig: {
+        value: function() {
+          return {
+            'entry': {
+              name: 'slide-from-left-animation',
+              node: this
+            },
+            'exit': {
+              name:'slide-left-animation',
+              node: this
+            }
+          }
+        }
+      }
+    }
+  });
+
+</script>

@@ -1,0 +1,265 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-styles/paper-styles.html">
+<link rel="import" href="../../neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../neon-animatable-behavior.html">
+<link rel="import" href="../../neon-animation-runner-behavior.html">
+
+<dom-module id="animated-grid2">
+
+  <link rel="import" type="css" href="../shared.css">
+ 
+
+  <style>
+
+    :host {
+      display: block;
+      padding-top: .25em;
+      margin-left: -.5em;
+      margin-right: -.5em;
+      /*background: #4D4D4D;*/
+      /*visibility: hidden;*/
+
+
+
+    }
+
+ 
+    .tile {
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      margin: .25em;
+      width: calc(100% / 6 - .5em);
+      height: calc(100% / 3 - .5em);
+
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .tile1 {
+      width: calc(100% / 3 - .5em);
+      height: calc(100% / 3 * 2 - .5em);
+    }
+
+    .tile4 {
+      width: calc(100% / 3 - .5em);
+    }
+
+    .tile5 {
+      width: calc(100% / 3 - .5em);
+      height: calc(100% / 3 * 2 - .5em);
+    }
+
+    .tile8 {
+      width: calc(100% / 3 - .5em);
+      height: calc(100% / 3 - .5em)  ;
+    }
+
+    .tile9 {
+      position: absolute;
+      top: calc(100% / 3 * 2 + 0em);
+      left: 0em;
+      /*width: calc(100% / 6 - .5em);
+      height: calc(100% / 3 - .5em);*/
+    }
+
+    .tile10 {
+      position: absolute;
+      top: calc(100% / 3 * 2 + 0em);
+      left: calc(100% / 6 - 0em);
+      /*width: calc(100% / 6 - .5em);
+      height: calc(100% / 3 - .5em);*/
+    }
+
+  @media (max-width: 899px) {
+    :host {
+      padding-top: .125em;
+    } 
+
+
+
+    .tile {
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      margin: .125em;
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .tile1 {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    }
+
+    .tile4 {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    }
+
+    .tile5 {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    }
+
+    .tile8 {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    }
+
+    .tile9 {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    }
+
+    .tile10 {
+      position: static;
+      top: calc(100% / 3 * 2);
+      left: calc(100% / 6);
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    }
+
+      }
+
+  
+
+    
+  </style>
+
+  <template>
+
+    
+        <div class="tile tile1">1</div> 
+        <div class="tile tile2">2</div>
+        <div class="tile tile3">3</div>
+        <div class="tile tile4">4</div>
+        <div class="tile tile5">5</div>
+        <div class="tile tile6">6</div>
+        <div class="tile tile7">7</div>
+        <div class="tile tile8">8</div>
+        <div class="tile tile9">9</div>
+        <div class="tile tile10">10</div>
+    
+   
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'animated-grid2',
+
+    behaviors: [
+      Polymer.NeonSharedElementAnimatableBehavior,
+      Polymer.NeonAnimatableBehavior,
+      Polymer.NeonAnimationRunnerBehavior
+    ],
+
+    properties: {
+
+      config: {
+        type: Array,
+        value: function() {
+          return [
+            {value: 1, color: 'blue'},
+            {value: 2, color: 'red'},
+            {value: 3, color: 'blue'},
+            {value: 4, color: 'green'},
+            {value: 5, color: 'yellow'},
+            {value: 6, color: 'blue'},
+            {value: 7, color: 'red'},
+            {value: 8, color: 'green'},
+            {value: 9, color: 'yellow'},
+            {value: 10, color: 'red'}
+          ]
+        }
+      },
+
+      animationConfig: {
+        type: Object,
+        value: function() {
+          return {
+            'entry': [{
+              name: 'cascaded-animation',
+              animation: 'transform-animation',
+              transformFrom: 'translateY(100%)',
+              transformTo: 'none',
+              timing: {
+                delay: 50
+              },
+              node: this
+            }],
+            'exit': [{
+              name: 'ripple-animation',
+              id: 'ripple',
+              fromPage: this
+            }, {
+              name: 'hero-animation',
+              id: 'hero',
+              fromPage: this
+            }]
+          }
+        }
+      }
+
+    },
+
+    attached: function() {
+      this.async(function() {
+        var nodeList = Polymer.dom(this.root).querySelectorAll('.tile');
+        this.animationConfig['entry'][0].nodes = Array.prototype.slice.call(nodeList);
+      });
+    },
+
+    listeners: {
+      click: '_onClick'
+    },
+
+    
+
+    _computeTileClass: function(color) {
+      return 'tile ' + color + '-300';
+    },
+
+  //   show: function() {
+  //   this.style.visibility = 'visible';
+  //   this.playAnimation('entry');
+  // }
+
+    _onClick: function(event) {
+      var target = event.target;
+      while (target !== this && !target._templateInstance) {
+        target = target.parentNode;
+      }
+
+      // configure the page animation
+      this.sharedElements = {
+        'hero': target,
+        'ripple': target
+      };
+      this.animationConfig['exit'][0].gesture = {
+        x: event.x || event.pageX,
+        y: event.y || event.pageY
+      };
+
+      this.fire('tile-click', {
+        tile: target,
+        data: target._templateInstance.item
+      });
+    }
+
+  });
+
+</script>
