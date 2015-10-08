@@ -9,4 +9,4 @@ Page.js routing will be implemented once the desired routing configuration schem
 
 Do not run bower update, some native polymer elements have been customized, custom elements have yet to be properly configured.
 
-This application is intended to subsume the current GBCC php website HTTPS://gacc.nifc.gov/gbcc
+This application is intended to subsume the current GBCC php website https://gacc.nifc.gov/gbcc
