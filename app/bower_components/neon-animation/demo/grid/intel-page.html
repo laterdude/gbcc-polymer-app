@@ -1,0 +1,120 @@
+<link rel="import" href="../../../polymer/polymer.html">
+<link rel="import" href="../../../paper-styles/paper-styles.html">
+<link rel="import" href="../../neon-animated-pages.html">
+<link rel="import" href="../../neon-animatable.html">
+<link rel="import" href="../../neon-animations.html">
+
+<dom-module id="intel-page">
+
+  <template id="intel"> <!-- template is="dom-bind"-->
+
+  <style>
+    :host {
+
+    }
+      
+    neon-animatable {
+        color: white;
+        @apply(--layout-horizontal);
+        @apply(--layout-center-center);
+        @apply(--paper-font-display4);
+    }
+
+    neon-animatable:nth-child(1) {
+        background: var(--paper-red-500);
+    }
+
+    neon-animatable:nth-child(2) {
+        background: var(--paper-blue-500);
+    }
+
+    neon-animatable:nth-child(3) {
+        background: var(--paper-orange-500);
+    }
+
+    neon-animatable:nth-child(4) {
+        background: var(--paper-green-500);
+    }
+
+    neon-animatable:nth-child(5) {
+        background: var(--paper-purple-500);
+      }
+  </style>
+
+      <div class="toolbar">
+        <button on-click="_onPrevClick">&lt;&lt;</button>
+        <button on-click="_onNextClick">&gt;&gt;</button>
+      </div>
+
+      <neon-animated-pages id="pages" class="flex" selected="[[selected]]" entry-animation="[[entryAnimation]]" exit-animation="[[exitAnimation]]">
+        <neon-animatable>1</neon-animatable>
+        <neon-animatable>2</neon-animatable>
+        <neon-animatable>3</neon-animatable>
+        <neon-animatable>4</neon-animatable>
+        <neon-animatable>5</neon-animatable>
+      </neon-animated-pages>
+
+    </template>
+
+    
+    
+  
+</dom-module>
+
+
+<script>
+
+Polymer({
+
+  is: 'intel-page',
+
+  behaviors: [
+    Polymer.NeonAnimatableBehavior,
+    Polymer.NeonAnimationRunnerBehavior
+  ],
+
+  properties: {
+
+    animationConfig: {
+      type: Object,
+      value: function() {
+        return {
+          'entry': [{
+            animatable: this.$.grid,
+            type: 'entry'
+          }]
+        };
+      }
+    }
+
+  },
+
+  show: function() {
+    this.style.visibility = 'visible';
+    this.playAnimation('entry');
+  }
+
+});
+
+
+
+
+      // var scope = Polymer.dom(this).querySelector('template[is="dom-bind"]');
+      var scope = document.querySelector('#intel');
+      scope.selected = 0;
+
+      scope._onPrevClick = function() {
+        this.entryAnimation = 'slide-from-left-animation';
+        this.exitAnimation = 'slide-right-animation';
+        this.selected = this.selected === 0 ? 4 : (this.selected - 1);
+      }
+
+      scope._onNextClick = function() {
+        this.entryAnimation ='slide-from-right-animation';
+        this.exitAnimation = 'slide-left-animation';
+        this.selected = this.selected === 4 ? 0 : (this.selected + 1);
+      }
+
+
+
+</script>

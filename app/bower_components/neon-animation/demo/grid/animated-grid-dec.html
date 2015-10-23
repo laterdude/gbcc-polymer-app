@@ -1,40 +1,151 @@
 <link rel="import" href="../../../polymer/polymer.html">
 <link rel="import" href="../../../paper-styles/paper-styles.html">
 <link rel="import" href="../../neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../../neon-animatable-behavior.html">
+<link rel="import" href="../../neon-animation-runner-behavior.html">
 
-<dom-module id="animated-grid">
+<link rel="import" type="css" href="../shared.css">
+<!--delete this import once element is refactored-->
 
-  <link rel="import" type="css" href="../shared.css">
+<dom-module id="animated-grid-dec">
+
+  <template>
 
   <style>
-
+  
     :host {
       display: block;
+      padding-top: .25em;
+      margin-left: -.5em;
+      margin-right: -.5em;
+      /*background: #4D4D4D;*/
+      visibility: hidden;
     }
 
-    :host::content div {
+    :host::content div.tile {
       display: inline-block;
       float: left;
-      color: white;
+      color: black;
       vertical-align: top;
-      width: calc(100% / 3);
-      height: calc(100% / 2);
+      margin: .25em;
+      width: calc(100% / 6 - .5em);
+      height: calc(100% / 3 - .5em);
+     /* width: calc(100% / 3);
+      height: calc(100% / 2);*/
 
       @apply(--paper-font-title);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
     }
+    :host::content div.tile:nth-of-type(1) {
+      width: calc(100% / 3 - .5em);
+      height: calc(100% / 3 * 2 - .5em);
+    } 
+    :host::content div.tile:nth-of-type(4) {
+      width: calc(100% / 3 - .5em);
+    } 
+    :host::content div.tile:nth-of-type(5) {
+      width: calc(100% / 3 - .5em);
+      height: calc(100% / 3 * 2 - .5em);
+    } 
+    :host::content div.tile:nth-of-type(8) {
+      width: calc(100% / 3 - .5em);
+      height: calc(100% / 3 - .5em);
+    } 
+    :host::content div.tile:nth-of-type(9) {
+      position: absolute;
+      top: calc(100% / 3 * 2 + 0em);
+      left: 0em;
+      /*width: calc(100% / 6 - .5em);
+      height: calc(100% / 3 - .5em);*/
+    } 
+    :host::content div.tile:nth-of-type(10) {
+      position: absolute;
+      top: calc(100% / 3 * 2 + 0em);
+      left: calc(100% / 6 - 0em);
+      /*width: calc(100% / 6 - .5em);
+      height: calc(100% / 3 - .5em);*/
+    } 
+    
+    :host::content div:hover {
+      @apply(--shadow-elevation-2dp);
+      position:relative;
+    }
 
+    @media (max-width: 899px) {
+    :host {
+      padding-top: .125em;
+    } 
+
+    :host::content div.tile {
+      display: inline-block;
+      float: left;
+      color: black;
+      vertical-align: top;
+      margin: .125em;
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+     
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+    :host::content div.tile:nth-of-type(1) {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    } 
+    :host::content div.tile:nth-of-type(4) {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    } 
+    :host::content div.tile:nth-of-type(5) {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    } 
+    :host::content div.tile:nth-of-type(8) {
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    } 
+    :host::content div.tile:nth-of-type(9) {
+      position: relative;
+      top: 0;
+      left: 0;
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    } 
+    :host::content div.tile:nth-of-type(10) {
+      position: static;
+      top: calc(100% / 3 * 2);
+      left: calc(100% / 6);
+      width: calc(100% / 2 - .25em);
+      height: 220px;
+    } 
+    
     :host::content div:hover {
       @apply(--shadow-elevation-2dp);
       position:relative;
     }
 
 
-  </style>
+    }
 
-  <template>
-    <content id='content'></content>
+    #placeholder {
+      opacity: 0;
+      background-color: grey;
+    }
+
+    #container {
+      height: 100%;
+    }
+
+  </style>
+  
+    <div id="placeholder" class="fit"></div>
+
+    <div id="container">
+        <content id='content' select="div"></content>
+    </div>
+    <!-- <content id='content' ></content> -->
   </template>
 
 </dom-module>
@@ -43,10 +154,12 @@
 
   Polymer({
 
-    is: 'animated-grid',
+    is: 'animated-grid-dec',
 
     behaviors: [
-      Polymer.NeonSharedElementAnimatableBehavior
+      Polymer.NeonSharedElementAnimatableBehavior,
+      Polymer.NeonAnimatableBehavior,
+      Polymer.NeonAnimationRunnerBehavior
     ],
 
     properties: {
@@ -63,36 +176,98 @@
               timing: {
                 delay: 50
               }
-            }]
+            },
+            {
+              name: 'reverse-ripple-animation',
+              id: 'reverse-ripple',
+              toPage: this
+            }],
+            'exit': [{
+              name: 'fade-out-animation',
+              node: this.$.container,
+              timing: {
+                delay: 150,
+                duration: 0
+              }
+            },
+
+
+            {
+              name: 'ripple-animation',
+              id: 'ripple',
+              fromPage: this
+            } 
+            // ,{
+            //   name: 'hero-animation',
+            //   id: 'hero',
+            //   fromPage: this
+            // }
+            ]
           }
         }
       }
+
     },
 
     attached: function() {
       this.async(function() {
         var nodeList = Polymer.dom(this.$.content).getDistributedNodes();
-        // I only want to animate divs
-        nodelist = nodeList.filter(function(node){
+        // I only want to animate divs ()
+        var divNodes = nodeList.filter(function(node){
           return (node.nodeName === "DIV");
         });
-        this.animationConfig['entry'][0].nodes = nodeList;
+        this.animationConfig.entry[0].nodes = divNodes;
+        // this.animationConfig.exit[1].fromPage = divNodes;
+        // this.animationConfig.entry[0].nodes = divNodes;
       });
     },
 
-    _computeTileClass: function(color) {
-      return 'background-color: ' + color + '';
-    }
+    // listeners: {
+    //   click: '_onClick'
+    // },
 
-  });
+    // _computeTileClass: function(color) {
+    //   return 'background-color: ' + color + '';
+    // },
+    // _computeTileClass: function(color) {
+    //   return 'tile ' + color + '';
+    // },
+
+    show: function() {
+    this.style.visibility = 'visible';
+    this.playAnimation('entry');
+    },
+
+  // _onClick: function(event) {
+  //     var target = event.target;
+  //     while (target !== this) {
+  //       target = target.parentNode;
+  //     }
+
+  //     // configure the page animation
+  //     this.sharedElements = {
+  //       'hero': target,
+  //       'ripple': target
+  //     };
+  //     this.animationConfig['exit'][0].gesture = {
+  //       x: event.x || event.pageX,
+  //       y: event.y || event.pageY
+  //     };
+
+  //     this.fire('tile-click', {
+  //       tile: target,
+  //       data: target.item
+  //     });
+  // }
+});
 
 </script>
 
-So i've been playing around with the neon element examples. Specifically the load example.
+<!-- So i've been playing around with the neon element examples. Specifically the load example.
 
 I'm able to accomplish what I want but I feel there should be a more elegant way to do it. The way the example loads content is by creating an array inside of a config object and then uses a dom-repeat to stamp them out all from within animated-grid.html
 
-This seems to force very tight coupling between the animations and the content that is being animating. I don't want to encapsulate content in side of my grid I basically want to say Hey I want an animated grid here are the cells/content to be put inside of it and then having the animated grid take care of laying out and animating those children
+This seems to force very tight coupling between the animations and the content that is being animated. I don't want to encapsulate content in side of my grid I basically want to say Hey I want an animated grid here are the cells/content to be put inside of it and then having the animated grid take care of laying out and animating those children
 
 I set out to create an API that was more declarative like this.
 
@@ -123,6 +298,7 @@ attached: function() {
     this.animationConfig['entry'][0].nodes = nodeList;
   });
 },
+
 However, I keep getting a nasty error in my console.
 
 
@@ -141,4 +317,4 @@ A solution is to use a new variable for the filter results:
 var divNodes = nodeList.filter(function(node){
   return (node.nodeName === 'DIV');
 });
-this.animationConfig.entry[0].nodes = divNodes;
+this.animationConfig.entry[0].nodes = divNodes; -->

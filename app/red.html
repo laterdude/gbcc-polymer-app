@@ -1,0 +1,307 @@
+<!--<link rel="import" href="https://rawgit.com/Polymer/polymer/master/polymer.html">-->
+<!--<link rel="import" href="https://elements.polymer-project.org/iron-ajax/iron-ajax.html">-->
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="bower_components/paper-input/paper-input.html">
+<link rel="import" href="bower_components/iron-input/iron-input.html">
+<link rel="import" href="bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+
+<reddit-pics></reddit-pics>
+
+<dom-module id="reddit-pics">
+  <template>
+    <iron-ajax id="ajax" url="{{ getUrl(subreddit) }}" last-response="{{ response }}"></iron-ajax>
+    <paper-input label="Subreddit" value="{{ subreddit }}" on-keyup="handleKeyUp"></paper-input>
+    <neon-animated-pages id="pages" attr-for-selected="id" selected="grid">
+      <image-list id="grid" images="{{ response.data.children }}" on-image-click="onImageClick"></image-list>
+      <image-preview id="preview" on-click="onPreviewClick"></image-preview>
+    <neon-animated-pages>
+  </template>
+  
+  <script>
+    Polymer({
+      is: 'reddit-pics',
+      attached: function() {
+        this.$.ajax.generateRequest();
+      },
+      properties: {
+        subreddit: {
+          type: String,
+          value: 'pics'
+        }
+      },
+      getUrl: function(subreddit) {
+        return 'http://www.reddit.com/r/' + subreddit + '.json';
+      },
+      handleKeyUp: function(e) {
+        if (e.keyCode === 13) {
+          this.$.ajax.generateRequest();
+        }
+      },
+      onImageClick: function(e) {
+        //console.log(e.detail);
+        //this.$['fullsize-card'].color = e.detail.data.color;
+        this.$.preview.image = e.detail.data;
+        this.$.pages.selected = 'preview';
+      },
+      onPreviewClick: function(e) {
+        console.log('switching back to grid');
+       
+        var nodeList = this.$.grid.querySelectorAll('.image');
+        this.$.grid.animationConfig['enter'][0].nodes = Array.prototype.slice.call(nodeList);
+        this.$.pages.selected = 'grid';
+      }
+    })
+  </script>
+</dom-module>
+
+<dom-module id="image-preview">
+  <style>
+    :host {
+      display: block;
+    }
+    
+    .fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+    
+      _background: rgba(255, 0, 0, .2);
+    }
+    
+    .preview {
+      width: 100vw;
+      height: 100vh;
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: black;
+    }
+  </style>
+  
+  <template>
+    <div class="fixed">
+      <div id="preview" class="preview" style$="{{ _computeStyle(image) }}">
+    </div>
+  </template>
+  
+  <script>
+    Polymer({
+      is: 'image-preview',
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior
+      ],
+      properties: {
+        image: Object,
+    
+        sharedElements: {
+          type: Object,
+          value: function() {
+            return {
+              'hero': this.$.preview
+            }
+          }
+        },
+    
+        animationConfig: {
+          type: Object,
+          value: function() {
+            return {
+              'entry': [{
+                name: 'hero-animation',
+                id: 'hero',
+                toPage: this,
+                timing: {
+                  delay: 0
+                }
+              }],
+              'exit': [{
+                name: 'transform-animation',
+                transformFrom: 'none',
+                transformTo: 'translate(0px,-100vh)',
+                node: this.$.preview
+              }]
+            }
+          }
+        }
+      },
+      _computeStyle: function(image) {
+        return "background-image: url(" + image.url + ")";
+      }
+    })
+  </script>
+</dom-module>
+
+<dom-module id="image-list">
+  <style>
+    :host {
+      display: flex;
+      flex-wrap: wrap;
+      box-sizing: border-box;
+      font-family: "Roboto", 'Helvetica Neue, Helvetica, Arial';
+    }
+    
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    
+    .image {
+      display: flex;
+      flex-basis: 33.33%;
+      height: 50vh;
+      background-position: center;
+      background-size: cover;
+      background-color: black;
+      position: relative;
+      transition: all .5s;
+    }
+    
+    @media screen and (max-width: 600px) {
+      .image {
+        flex-grow: 1;
+        flex-basis: 200px;
+        height: 200px;
+      }
+    }
+    
+    .image:hover {
+      background-size: contain;
+      background-repeat: no-repeat
+    }
+    
+    .title {
+      position: absolute;
+      bottom: 0;
+      font-weight: 100;
+      color: white;
+      background: rgba(0,0,0,.5);
+      -background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,.7) 50%);  
+      height: 50px;
+      width: 100%;
+      padding: 10px;
+      overflow: hidden;
+    }
+    
+  </style>
+  
+  <template>
+    <template id="images" is="dom-repeat" items="{{images}}">
+      <!--
+      <a href="{{ item.data.url }}" target="_blank" class="image" style$="{{ _computeStyle(item.data) }}">
+        <div class="title">{{ item.data.title }}</div>
+      </a>
+      -->
+      <div class="image" style$="{{ _computeStyle(item.data) }}">
+        <div class="title">{{ item.data.title }}</div>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'image-list',
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+      attached: function() {
+        //debugger;
+        //var self = this; 
+        this.$$('#images').addEventListener('dom-change', function(e) {
+          //debugger;
+          console.log('dom-change');
+          var element = e.srcElement.parentElement;
+          var nodeList = element.querySelectorAll('.image');
+          element.animationConfig['enter'][0].nodes = Array.prototype.slice.call(nodeList);
+          element.playAnimation('entry');
+        });
+      },
+      properties: {
+        images: {
+          type: Array,
+        },
+        animationConfig: {
+          type: Object,
+          value: function() {
+            return {
+              'enter': [{
+                name: 'cascaded-animation',
+                animation: 'transform-animation',
+                transformFrom: 'translateY(100%)',
+                transformTo: 'none',
+                timing: {
+                  delay: 50
+                }
+              }],
+              'exit': [{
+                name: 'hero-animation',
+                id: 'hero',
+                fromPage: this
+              }]
+            }
+          }
+        }
+      },
+      listeners: {
+        click: '_onClick'
+      },
+      _onClick: function(event) {
+        var target = event.target;
+        while (target !== this && !target._templateInstance) {
+          target = target.parentNode;
+        }
+    
+        console.log('target', target);
+        // configure the page animation
+        this.sharedElements = {
+          'hero': target
+        };
+        this.animationConfig['exit'][0].gesture = {
+          x: event.x,
+          y: event.y
+        };
+    
+        this.fire('image-click', {
+          image: target,
+          data: target._templateInstance.item.data
+        });
+      },
+    
+      _computeStyle(item) {
+        //console.log(item)
+        var url = null;
+        if (item.domain === 'imgur.com') {
+          //console.log('item.url', item.url);
+    
+          //https://api.imgur.com/models/image
+          var thumbnailSize = {
+            'smallSquare': 's', // 	90x90   	  No
+            'bigSquare':   'b', 	// 160x160	   No
+            'small':       't', // 	160x160	   Yes
+            'medium':      'm', // 	320x320	   Yes
+            'large':       'l', // 	640x640	   Yes
+            'huge':        'h'  // 	1024x1024	 Yes
+          };
+
+          var urlParts = item.url.match("(https?:\/\/)(imgur.com)(\/.*)")
+          var size = thumbnailSize.large;
+          //console.log('item', item, 'urlParts', urlParts);
+          if (urlParts[3].startsWith('/a')) {
+            url = urlParts[1] + 'i.' + urlParts[2] + urlParts[3].substring(2);
+          } else {
+            url = urlParts[1] + 'i.' + urlParts[2] + urlParts[3] + size + '.jpg';
+          }
+          //console.log(urlParts[3].startsWith('/a'), 'urlParts', urlParts, 'url', url);
+          
+          //console.log('url', url)
+        } else {
+          url = item.url.toLowerCase().endsWith(".jpg") ? item.url : item.thumbnail; 
+        }
+        return "background-image: url(" + url + ")";
+      }
+    });
+  </script>
+</dom-module>

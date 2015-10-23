@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
-     document.querySelector('animated-grid1').show();
+     document.querySelector('animated-grid-dec').show();
     // imports are loaded and elements have been registered
   });
 
@@ -81,13 +81,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
    //neon grid
   var scope = document.querySelector('template[is="dom-bind"]');
 
-      scope._onTileClick = function(event) {
-        this.$['fullsize-card'].color = event.detail.data.color;
+      scope._onHomeClick = function(event) {
+        this.$.pages.selected = 0;
+      };
+
+      scope._onIncidentsClick = function(event) {
+        this.$.list.sharedElements = {
+          'ripple': event.target,
+          'reverse-ripple': event.target
+        };
         this.$.pages.selected = 1;
       };
 
-      scope._onFullsizeClick = function(event) {
-        this.$.pages.selected = 0;
+      scope._onPredictiveClick = function(event) {
+        this.$.list.sharedElements = {
+          'ripple': event.target,
+          'reverse-ripple': event.target
+        };
+        this.$.pages.selected = 2;
       };
+
+      scope._onIntelClick = function(event) {
+        this.$.list.sharedElements = {
+          'ripple': event.target,
+          'reverse-ripple': event.target
+        };
+        this.$.pages.selected = 3;
+      };
+      
+
+
+      // scope._onTileClick = function(event) {
+      //   this.$['fullsize-card'].color = event.detail.data.color;
+      //   this.$.pages.selected = 1;
+      // };
+
+      // scope._onFullsizeClick = function(event) {
+      //   this.$.pages.selected = 0;
+      // };
+
 
 })(document);
