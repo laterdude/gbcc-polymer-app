@@ -76,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Drawer Content   -->
       <paper-menu class="list" attr-for-selected="data-route" selected=[[route]]>
 
-        <a data-route="home" href="/" on-click="onDataRouteClick">
+        <a data-route="home" href="" on-click="onDataRouteClick">
         <iron-icon icon="home"></iron-icon>
         <span>HOME</span>
         </a>
@@ -116,7 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-item>
               <paper-menu class="menu-content">
                 <a data-route="predictive" href="/predictive" on-click="onDataRouteClick"><paper-item>Intelligence</paper-item></a>
-                  <a data-route="fuels" href="/predictive/fuels" on-click="onDataRouteClick"><paper-item>Fuels & Fire Danger</paper-item></a>
+                <a data-route="fuels" href="/predictive/fuels" on-click="onDataRouteClick"><paper-item>Fuels & Fire Danger</paper-item></a>
                 <a data-route="predictive" href="/predictive" on-click="onDataRouteClick"><paper-item>Outlooks</paper-item></a>
                 <a data-route="predictive" href="/predictive" on-click="onDataRouteClick"><paper-item>Weather</paper-item></a>
           </paper-menu>
@@ -128,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-item>
               <paper-menu class="menu-content">
                 <a data-route="logistics" href="/logistics" on-click="onDataRouteClick"><paper-item>Aircraft</paper-item></a>
-                  <a data-route="logistics" href="/logistics" on-click="onDataRouteClick"><paper-item>Crews</paper-item></a>
+                <a data-route="logistics" href="/logistics" on-click="onDataRouteClick"><paper-item>Crews</paper-item></a>
                 <a data-route="logistics" href="/logistics" on-click="onDataRouteClick"><paper-item>Equipment & Supplies</paper-item></a>
                 <a data-route="logistics" href="/logistics" on-click="onDataRouteClick"><paper-item>Overhead</paper-item></a>
               </paper-menu>
@@ -215,129 +215,144 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Content -->
         <div class="content">
-        <!-- <template is="dom-bind" id="dashboard"> -->
-        <!-- <neon-animated-pages id="pages" class="flex" selected="[[selected]]" entry-animation="slide-from-right-animation" exit-animation="slide-left-animation"> -->
-          <!-- <neon-animated-pages class="flex" attr-for-selected="data-route" selected="[[route]]"> -->
-      
+             
+          <neon-animated-pages attr-for-selected="data-route" selected="{{route}}"> 
+          
+            <animated-grid-dec data-route="home" id="grid">
+              <div class="tile" style="            
+                background-image: -webkit-radial-gradient(  50%   0%,  8% 50%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+                  -webkit-radial-gradient(  50% 100%, 12% 50%, hsla(0,0%,100%,.6) 0%, hsla(0,0%,100%,0) 100%),
+                  -webkit-radial-gradient(   0%  50%, 50%  7%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+                  -webkit-radial-gradient( 100%  50%, 50%  5%, hsla(0,0%,100%,.5) 0%, hsla(0,0%,100%,0) 100%),
+                  
+                  -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   3%, hsla(0,0%,  0%,.1) 3.5%),
+                  -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%,.1) 7.5%),
+                  -webkit-repeating-radial-gradient( 50% 50%, 100% 100%, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.2) 2.2%),
+                  
+                  -webkit-radial-gradient( 50% 50%, 200% 50%, hsla(0,0%,90%,1) 5%, hsla(0,0%,85%,1) 30%, hsla(0,0%,60%,1) 100%);
+              ">
+                <!-- background: -webkit-linear-gradient(90deg, #4b6cb7 10%, #182848 90%); /* Chrome 10+, Saf5.1+ */
+                background:    -moz-linear-gradient(90deg, #4b6cb7 10%, #182848 90%); /* FF3.6+ */
+                background:     -ms-linear-gradient(90deg, #4b6cb7 10%, #182848 90%); /* IE10 */
+                background:      -o-linear-gradient(90deg, #4b6cb7 10%, #182848 90%); /* Opera 11.10+ */
+                background:         linear-gradient(90deg, #4b6cb7 10%, #182848 90%); /* W3C */ -->
 
-      <neon-animated-pages id="pages" selected="0">  <!--This corresponds to initial working version of animated-grid-dec-->
-      <!-- <neon-animated-pages id="pages" attr-for-selected="data-route" selected="[[route]]"> -->
-      <!--full-page class="fit"></full-page-->
-
-      <!-- <animated-grid-dec id="grid" on-tile-click="_onTileClick"> -->
-      <animated-grid-dec id="list">
-          <div class="tile" style="background-color: #4CAF50"> 
-            <div on-click="_onIncidentsClick">Incidents</div>
-          </div>
-          <div class="tile" style="background-color: #FF9800">
-            <div on-click="_onPredictiveClick">Predictive</div>
-          </div>
-          <div class="tile" style="background-color: #2196F3">
-            <div on-click="_onIntelClick">Intelligence</div> 
-          </div>
-          <div class="tile" style="background-color: #673AB7"> <span>4</span> </div>
-          <div class="tile" style="background-color: #FF9800"> <span>5</span> </div>
-          <div class="tile" style="background-color: #049688"> <span>6</span> </div>
-          <div class="tile" style="background-color: #2196F3"> <span>7</span> </div>
-          <div class="tile" style="background-color: #673AB7"> <span>8</span> </div>
-          <div class="tile" style="background-color: #FF9800"> <span>9</span> </div>
-          <div class="tile" style="background-color: #049688"> <span>10</span> </div>
-      </animated-grid-dec>
-      <page-card>
-        <div class="fit layout vertical center-center">
-
-              <div class="raised back button" on-click="_onHomeClick">
-                Home
-              </div>
-              <h2>Incidents</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-
-            </div>
-      </page-card>
-      <page-card>
-      <div class="fit layout vertical center-center">
-
-              <div class="raised back button" on-click="_onHomeClick">
-                Home
-              </div>
-              <h2>Predictive Services</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-
-            </div>
-      </page-card>
-      <page-card>
-        <div>
-          <intel-page></intel-page><!--uncomment element in elements.html file after fixing-->
-        </div>
-      </page-card>
-
-      <!-- <fullsize-page-with-card id="fullsize-card" hero-id="hero" on-click="_onFullsizeClick">
-      </fullsize-page-with-card> -->
-
-        <!-- <animated-grid1 on-tile-click="_onTileClick"></animated-grid1>
-
-        <fullsize-page-with-card id="fullsize-card" hero-id="hero" on-click="_onFullsizeClick">
-        </fullsize-page-with-card> -->
-
-               
-                <!-- <dashboard-layout data-route="home"></dashboard-layout>
-                <dashboard-layout1 data-route="incidents"></dashboard-layout1>
-                <dashboard-layout1 data-route="fuels"></dashboard-layout1> -->
-
-
-                <!-- <incidents-page data-route="incidents"></incidents-page> -->
                 
-                    <!-- <paper-material elevation="3">
-                      <my-greeting></my-greeting>
-
-                      <p class="paper-font-subhead">Incident Information</p>
-                      <my-list></my-list>
-
-                  <paper-fab icon="add"></paper-fab>
-                    </paper-material>
-
-                    <paper-material elevation="3">
-                      <p class="paper-font-body2">Predictive Services</p>
-                  </paper-material>
-
-                  <paper-material elevation="3" class="paper-font-body2">
-                      <h1 id=""></h1>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                        <ul>
-                          <li></li>
-                          <li></li>
-                          <li></li>
-                      </ul>
-                        <p></p>
-                    </paper-material>
-
-                </section>
-
-                <section data-route="incidents">
-                
+                <a href="incidents" on-click="onRouteClick" onmousedown="document.getElementById('fire').style.fill='hsl(210, 100%, 40%)';"
+                onmouseout="document.getElementById('fire').style.fill='hsla(0,0%,20%,1)';"><button class="metal radial">
+                <!-- ✈ -->
+                <svg width="79.54px" height="79.54px" >
+                    <g>
+                    <path id="fire" d="M54.877,44.304c0-1.211,5.193-17.29-4.914-22.151C38.319,16.549,35.096,12.083,35.197,4.919
+                  c-0.01,0.293-7.042,11.63-2.465,17.233c7.115,8.67,4.109,15.384,0,14.768c-6.9-1.033-6.066-10.038-4.917-12.306
+                  c-3.609-0.383-7.783,1.861-9.852,4.919c-6.208,9.228,7.25,18.054,2.465,24.614c-3.643,4.997-9.862-4.842-9.841-4.919
+                  C3.196,87.8,56.86,88.778,59.812,56.612c0.88-9.646,9.563-14.892,9.839-14.766C60.401,37.572,54.877,44.609,54.877,44.304z
+                   M37.657,71.375c-12.899,0.481-11.579-9.196-9.841-12.303c2.195-3.967,7.759-4.749,4.922-9.849
+                  c0.036,0.072,6.041,0.979,9.841,4.919C48.414,60.17,47.752,71.003,37.657,71.375z M45.043,12.306
+                  c-1.506-1.615-2.464-3.557-2.464-4.924c0-2.561,2.092-5.023,4.924-7.381c0.285,2.053-1.228,5.126,0,7.381
+                  c0.953,1.67,2.465,3.557,2.465,4.924c0,1.831-0.684,3.5-2.465,4.922C47.233,16.544,46.763,14.294,45.043,12.306z">
+                  </path>
+                  </g>
+                  </svg>                 
+                </button></a>
+                <!-- </a> -->
+                <!-- <button class="metal linear">2</button>
+                <button class="metal linear">1</button>
+                <button class="metal linear">0</button> -->
+                <!-- <a href="incidents" on-click="onRouteClick"><button class="metal linear oval">i</button></a>           -->
+              </div>
+              <div class="tile" style="
+                background: -webkit-linear-gradient(90deg, #283048 10%, #859398 90%); /* Chrome 10+, Saf5.1+ */
+                background:    -moz-linear-gradient(90deg, #283048 10%, #859398 90%); /* FF3.6+ */
+                background:     -ms-linear-gradient(90deg, #283048 10%, #859398 90%); /* IE10 */
+                background:      -o-linear-gradient(90deg, #283048 10%, #859398 90%); /* Opera 11.10+ */
+                background:         linear-gradient(90deg, #283048 10%, #859398 90%); /* W3C */        
+              ">
+                <a href="predictive" on-click="onRouteClick" onmousedown="document.getElementById('met').style.fill='hsl(210, 100%, 40%)';"
+                onmouseout="document.getElementById('met').style.fill='hsla(0,0%,20%,1)';"><button class="metal linear">
+                  <svg 
+                    width="79.536px" height="79.536px">
+                    <g>
+                      <path id="met" d="M78.967,29.396c0,8.124-6.582,14.7-14.706,14.7c-0.58,0-6.131,0-13.489,0
+                        c-4.464,0-9.574,0-14.685,0c-12.896,0-25.626,0-26.942,0c-4.735,0-8.575-1.799-8.575-6.54c0-4.735,3.84-8.575,8.575-8.575
+                        c0.857,0,1.675,0.171,2.47,0.409c0-0.067-0.021-0.132-0.021-0.202c0-5.525,4.479-9.999,10.004-9.999
+                        c0.228,0,0.456,0.052,0.687,0.067c-0.013-0.233-0.075-0.451-0.075-0.684C22.209,8.313,30.522,0,40.788,0
+                        c9.264,0,16.896,6.814,18.289,15.689c1.61-0.616,3.351-0.991,5.184-0.991C72.385,14.698,78.967,21.279,78.967,29.396z
+                         M49.177,47.618H34.504c-4.306,4.329-11.283,11.34-11.363,11.34h11.757L23.146,79.536l26.45-23.52h-8.818L49.177,47.618z">
+                      </path>
+                    </g>
+                </button></a>          
+              </div>
+              <div class="tile" style="background-color: #2196F3">
+                <a href="intel" on-click="onRouteClick"><div>Intelligence</div></a>           
+              </div>
+              <div class="tile" style="
+                background: linear-gradient(to bottom, rgba(7,42,78,1) 0%,rgba(10,48,85,1) 6%,rgba(19,66,106,1) 15%,rgba(35,94,137,1) 24%,rgba(60,127,166,1) 33%,rgba(80,146,178,1) 39%,rgba(100,163,184,1) 44%,rgba(128,180,182,1) 51%,rgba(151,192,177,1) 56%,rgba(178,201,166,1) 62%,rgba(194,202,155,1) 66%,rgba(213,199,137,1) 71%,rgba(228,189,118,1) 76%,rgba(238,168,92,1) 84%,rgba(240,150,75,1) 92%,rgba(236,126,57,1) 98%,rgba(235,120,53,1) 100%);
+              ">          
+                <span>4</span>
+              </div>
+              <div class="tile" style="
+                background: -webkit-radial-gradient(closest-corner, rgba(16, 47, 70, 0) 60%, rgba(16, 47, 70, 0.2)), -webkit-linear-gradient(108deg, #e0da81, #e0a681 10%, #0f1b58 90%);
+                background-image: -webkit-radial-gradient(center, ellipse closest-corner, rgba(16, 47, 70, 0) 60%, rgba(16, 47, 70, 0.2)), -webkit-linear-gradient(108deg, rgb(224, 218, 129), rgb(224, 166, 129) 10%, rgb(15, 27, 88) 90%);
+              ">              
+                <span>5</span> 
+              </div>
+              <div class="tile" style="
+                background: linear-gradient(45deg, orange 0%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(135deg, red 0%, rgba(255, 0, 0, 0.1) 50%), linear-gradient(225deg, blue 0%, rgba(0, 0, 255, 0.1) 50%), linear-gradient(315deg, green 0%, rgba(0, 255, 0, 0.1) 50%);
+              "><span>6</span></div>
+              <div class="tile" style="background-color: #2196F3"><span>7</span></div>
+              <div class="tile" style="background: -webkit-radial-gradient(15% 20%, circle, #E2A112, #00018f);"><span>8</span></div>
+              <div class="tile" style="background-color: #FF9800"> <span>9</span> </div>
+              <div class="tile" style="background-color: #049688"> <span>10</span> </div>
+            </animated-grid-dec>
+     
+            <page-card data-route="incidents">
+              <nav>
+                <ul>
+                  <li>
+                    <a href=""><div>Home</div></a>
+                  </li>            
+                </ul>
+              </nav>
+              <h1 id="author"><div>Incidents</div></h1>       
+            </page-card>
+         
+            <page-card data-route="predictive">
+              <nav>
+                  <ul>
+                    <li>
+                      <a href=""><div>Home</div></a>
+                    </li>            
+                  </ul>
+                </nav>
+                <h1 id="author"><div>Predictive</div></h1> 
+            </page-card>            
+            <page-card data-route="intel">
+              <nav>
+                  <ul>
+                    <li>
+                      <a href=""><div>Home</div></a>
+                    </li>            
+                  </ul>
+                </nav>
+                <h1 id="author"><div>Intelligence</div></h1> 
+            </page-card>
+            <page-card data-route="fuels">
+                <nav>
+                  <ul>
+                    <li>
+                      <a href=""><div>Home</div></a>
+                    </li>            
+                  </ul>
+                </nav>
+                <h1 id="author"><div>Fuels & Fire Danger</div></h1> 
                     <paper-material elevation="3">
                       <h2 class="paper-font-display2">Incident Information</h2>
                       <p>InciWeb</p>
                   </paper-material>
-                </section>
+                </page-card>
 
-                <section data-route="predictive">
+                <!-- <section data-route="predictive">
                     <paper-material elevation="3">
                       <h2 class="paper-font-display2">Fuels & Fire Danger</h2>
                         <p></p>
@@ -391,9 +406,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-material elevation="1">
                       <h2 class="paper-font-display2">Contact</h2>
                       <p></p>
-                  </paper-material>
+                  </paper-material> -->
 
-                </section>  -->
+              
 
         </neon-animated-pages>
         

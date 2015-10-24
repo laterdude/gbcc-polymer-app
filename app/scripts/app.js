@@ -9,7 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 // document.addEventListener('WebComponentsReady', function() {
 //   document.querySelector('animated-grid1').show();
 // });
-
+ 
 (function(document) {
   'use strict';
 
@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // and give it some initial binding values
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
-  app.selected = 0;  
+  app.selected = 'home';  
   
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
@@ -64,7 +64,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // Scale middleContainer appName
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   });
-
+  
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onDataRouteClick = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
@@ -79,35 +79,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   };
 
    //neon grid
-  var scope = document.querySelector('template[is="dom-bind"]');
+  // var scope = document.querySelector('template[is="dom-bind"]');
 
-      scope._onHomeClick = function(event) {
-        this.$.pages.selected = 0;
-      };
+      // scope._onHomeClick = function(event) {
+      // app.onDataRouteClick = function(event) {
+        
+      //   this.$.grid.sharedElements = {
+      //     'ripple': event.target,
+      //     'reverse-ripple': event.target
+      //   };
+      //   this.$.grid.selected = 'home';
+      // };
 
-      scope._onIncidentsClick = function(event) {
-        this.$.list.sharedElements = {
+      // scope._onIncidentsClick = function(event) {
+      app.onRouteClick = function(event) {
+        this.$.grid.sharedElements = {
           'ripple': event.target,
           'reverse-ripple': event.target
         };
-        this.$.pages.selected = 1;
+        this.$.selected = '[[data-route]]';
       };
 
-      scope._onPredictiveClick = function(event) {
-        this.$.list.sharedElements = {
-          'ripple': event.target,
-          'reverse-ripple': event.target
-        };
-        this.$.pages.selected = 2;
-      };
+      // // scope._onPredictiveClick = function(event) {
+      //   scope.onDataRouteClick = function(event) {
+      //   this.$.grid.sharedElements = {
+      //     'ripple': event.target,
+      //     'reverse-ripple': event.target
+      //   };
+      //   this.$.selected = 'predictive';
+      // };
 
-      scope._onIntelClick = function(event) {
-        this.$.list.sharedElements = {
-          'ripple': event.target,
-          'reverse-ripple': event.target
-        };
-        this.$.pages.selected = 3;
-      };
+      // // scope._onIntelClick = function(event) {
+      //   scope.onDataRouteClick = function(event) {
+      //   this.$.grid.sharedElements = {
+      //     'ripple': event.target,
+      //     'reverse-ripple': event.target
+      //   };
+      //   this.$.selected = 'intel';
+      // };
       
 
 
